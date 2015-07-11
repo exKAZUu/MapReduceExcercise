@@ -1,4 +1,4 @@
-package jp.ac.nii.backend;
+package jp.ac.nii;
 
 import java.io.IOException;
 
@@ -10,7 +10,6 @@ import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 /**
  * 以下の式の関連度を計算するジョブのMapperです。
  *   関連度 = 商品Xと商品Yのペアの総数 / 商品Xを含むペアの総数
- * このクラスは完成しています。
  */
 public class RelativityCaclulationMapper extends
 		Mapper<LongWritable, Text, Text, Text> {
@@ -49,11 +48,11 @@ public class RelativityCaclulationMapper extends
 		@Override
 		public void write(LongWritable keyIn, Text valueIn, Context context)
 				throws IOException, InterruptedException {
+			// 商品名,出現回数
 			String[] goodsNameAndNum = valueIn.toString().split(",");
 
-			// 分母と分子を区別するためにキーの末尾に"#d"を追加
-			context.write(new Text(goodsNameAndNum[0] + "#d"), new Text(
-					goodsNameAndNum[1]));
+			// TODO: 分母(DenominationWriter)と分子(NumeratorWriter)を区別するためにキーの末尾に"#d"文字列を追加
+			context.write(, new Text(goodsNameAndNum[1]));
 		}
 	}
 
@@ -64,15 +63,11 @@ public class RelativityCaclulationMapper extends
 		@Override
 		public void write(LongWritable keyIn, Text valueIn, Context context)
 				throws IOException, InterruptedException {
+			// 商品名1,商品名2,出現回数
 			String[] goodsPairAndNum = valueIn.toString().split(",");
-
-			keyOut.set(goodsPairAndNum[0]);
-			valueOut.set(goodsPairAndNum[1] + "," + goodsPairAndNum[2]);
-			context.write(keyOut, valueOut);
-
-			keyOut.set(goodsPairAndNum[1]);
-			valueOut.set(goodsPairAndNum[0] + "," + goodsPairAndNum[2]);
-			context.write(keyOut, valueOut);
+			
+			// TODO: キーが「商品名1」でバリューが「商品名2,出現回数」と、キーが「商品名2」でバリューが「商品名1,出現回数」で2回出力してください
+			TODO;
 		}
 	}
 }

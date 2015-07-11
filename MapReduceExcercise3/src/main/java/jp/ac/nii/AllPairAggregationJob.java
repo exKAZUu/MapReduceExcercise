@@ -1,4 +1,4 @@
-package jp.ac.nii.backend;
+package jp.ac.nii;
 
 import java.io.IOException;
 
@@ -31,22 +31,24 @@ public class AllPairAggregationJob extends Job {
 		this.setJarByClass(AllPairAggregationJob.class);
 
 		// TODO: MapperクラスとReducerクラスを設定するコードを記載してください
-		this.setMapperClass(AllPairAggregationMapper.class);
-		this.setReducerClass(AllPairAggregationReducer.class);
+		this.setMapperClass();
+		this.setReducerClass();
 
 		// TODO: 中間データのKeyとValueの型を設定するコードを記載してください
-		this.setMapOutputKeyClass(Text.class);
-		this.setMapOutputValueClass(IntWritable.class);
-		this.setOutputKeyClass(NullWritable.class);
-		this.setOutputValueClass(Text.class);
+		this.setMapOutputKeyClass();
+		this.setMapOutputValueClass();
+
+		// TODO: 出力データのKeyとValueの型を設定するコードを記載してください
+		this.setOutputKeyClass();
+		this.setOutputValueClass();
 
 		// TODO: 利用するInputFormatとOutputFormatを設定するコードを記載してください
-		this.setInputFormatClass(TextInputFormat.class);
-		this.setOutputFormatClass(TextOutputFormat.class);
+		this.setInputFormatClass();
+		this.setOutputFormatClass();
 
 		// TODO: HDFS上の入力ファイルと出力ファイルのパスを設定するコードを記載してください
-		FileInputFormat.addInputPath(this, inputFile);
-		FileOutputFormat.setOutputPath(this, outputFile);
+		FileInputFormat.addInputPath(this, );
+		FileOutputFormat.setOutputPath(this, );
 
 		this.setNumReduceTasks(10);
 	}

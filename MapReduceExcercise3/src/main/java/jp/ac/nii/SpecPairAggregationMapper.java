@@ -1,4 +1,4 @@
-package jp.ac.nii.backend;
+package jp.ac.nii;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -15,7 +15,7 @@ import org.apache.hadoop.mapreduce.Mapper;
 // TODO: 型パラメータを補完してください
 // ヒント： Mapperの出力データのKeyとValueの型は、ReducerのKeyとValueの型と一致させる
 public class SpecPairAggregationMapper extends
-		Mapper<LongWritable, Text, Text, IntWritable> {
+		Mapper<> {
 
 	private static final IntWritable one = new IntWritable(1);
 
@@ -29,11 +29,11 @@ public class SpecPairAggregationMapper extends
 
 		// TODO: 商品のペアを昇順にソートするコードを記載してください
 		// ヒント：Arraysクラスのsortメソッドが利用できる
-		Arrays.sort(goodsPair);
+		TODO;
 
 		keyOut.set(goodsPair[0] + "," + goodsPair[1]);
 
 		// TODO: 昇順でカンマ区切りの商品ペアをKey、「1」をValueとして中間データを出力するコードを記載してください
-		context.write(keyOut, one);
+		TODO;
 	}
 }

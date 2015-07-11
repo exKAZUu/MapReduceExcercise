@@ -1,4 +1,4 @@
-package jp.ac.nii.backend;
+package jp.ac.nii;
 
 import java.io.IOException;
 
@@ -28,15 +28,15 @@ public class SpecPairAggregationJob extends Job {
 		this.setJarByClass(SpecPairAggregationJob.class);
 
 		// TODO: MapperクラスとReducerクラスをセットするコードを記載してください
-		this.setMapperClass(SpecPairAggregationMapper.class);
-		this.setReducerClass(SpecPairAggregationReducer.class);
+		this.setMapperClass();
+		this.setReducerClass();
 
 		this.setMapOutputKeyClass(Text.class);
 		this.setMapOutputValueClass(IntWritable.class);
 
 		// TODO: 出力データのKeyとValueのクラスを設定するコードを記載してください
-		this.setOutputKeyClass(NullWritable.class);
-		this.setOutputValueClass(Text.class);
+		this.setOutputKeyClass();
+		this.setOutputValueClass();
 
 		this.setInputFormatClass(TextInputFormat.class);
 		this.setOutputFormatClass(TextOutputFormat.class);
@@ -44,6 +44,6 @@ public class SpecPairAggregationJob extends Job {
 		FileOutputFormat.setOutputPath(this, outputFile);
 
 		// TODO: Reduceタスクを10並列で実行するコードを記載してください
-		this.setNumReduceTasks(10);
+		TODO;
 	}
 }

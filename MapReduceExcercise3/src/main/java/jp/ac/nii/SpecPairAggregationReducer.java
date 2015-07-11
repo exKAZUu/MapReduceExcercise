@@ -1,4 +1,4 @@
-package jp.ac.nii.backend;
+package jp.ac.nii;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -13,7 +13,7 @@ import org.apache.hadoop.mapreduce.Reducer;
  *  関連度 = 商品Xと商品Yのペアの総数 / 商品Xを含むペアの総数
  */
 public class SpecPairAggregationReducer extends
-		Reducer<Text, IntWritable, NullWritable, Text> {
+		Reducer<> {
 
 	private static final NullWritable nullWritable = NullWritable.get();
 
@@ -33,6 +33,6 @@ public class SpecPairAggregationReducer extends
 		valueOut.set(keyIn.toString() + "," + sum);
 
 		// TODO 空のKeyと、 商品のペアとペアの出現回数がカンマ区切りで記録されたデータをValueとして出力するコードを記載してください
-		context.write(nullWritable, valueOut);
+		TODO;
 	}
 }

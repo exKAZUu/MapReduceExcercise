@@ -1,4 +1,4 @@
-package jp.ac.nii.backend;
+package jp.ac.nii;
 
 import java.io.IOException;
 
@@ -14,7 +14,7 @@ import org.apache.hadoop.mapreduce.Mapper;
 // TODO: 型パラメータを補完してください
 //　ヒント： FileInputFormat系(TextInputFormatなど)を使用する場合、入力のKeyはLongWritable、ValueはText型です
 public class AllPairAggregationMapper extends
-		Mapper<LongWritable, Text, Text, IntWritable> {
+		Mapper<> {
 
 	private static final IntWritable one = new IntWritable(1);
 
@@ -28,8 +28,7 @@ public class AllPairAggregationMapper extends
 
 		for (String goods : goodsPair) {
 			// TODO: ワードカウントの要領で、商品名をKeyに、「1」をValueに設定し、中間データを出力するコードを記載してください
-			keyOut.set(goods);
-			context.write(keyOut, one);
+			TODO;
 		}
 	}
 }

@@ -1,4 +1,4 @@
-package jp.ac.nii.backend;
+package jp.ac.nii;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -23,7 +23,10 @@ public class RelativityCalculationReducer extends
 			throws IOException, InterruptedException {
 		Iterator<Text> iterator = values.iterator();
 
-		// 一番最初のvalueが分母になるようにソート済み（RelativityCalculationJob）
+		// 一番最初のvalueが分母になるようにRelativityCalculationJobでソート方法を設定済み
+		// #dがついたキーは、同じキーの中でも辞書順で最も大きい
+		// 辞書順で大きい順にソートするようにしているため、#dがついたキーが必ず最初に来る
+		// また、同じキーのバリューを集めるときに、#dを無視して処理しているので、分母データと分子データが混ざる
 		double denominator = Double.parseDouble(iterator.next().toString());
 
 		String keyStr = keyIn.toString();
