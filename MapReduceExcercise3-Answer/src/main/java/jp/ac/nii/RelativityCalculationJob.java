@@ -49,8 +49,11 @@ public class RelativityCalculationJob extends Job {
 		FileInputFormat.addInputPath(this, numerationFile);
 		FileOutputFormat.setOutputPath(this, outputFile);
 
-		this.setPartitionerClass(RelativityCalculationPartitioner.class);
+		// キーの並び順をどうするか（ノードの割り当て前のキーのソート処理の制御）
 		this.setSortComparatorClass(RelativityCalculationSortComparator.class);
+		// どのノードでReduce処理を実行するか
+		this.setPartitionerClass(RelativityCalculationPartitioner.class);
+		// どのキーとどのキーを同一とみなすか（Reduceの処理単位の制御）
 		this.setGroupingComparatorClass(RelativityCalculationGroupComparator.class);
 
 		this.setNumReduceTasks(10);

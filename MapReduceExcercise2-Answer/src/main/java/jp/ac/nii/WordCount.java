@@ -94,6 +94,11 @@ public class WordCount {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				tokenizer.close();
+			} catch (IOException e) {
+			}
 		}
 
 		return result;
