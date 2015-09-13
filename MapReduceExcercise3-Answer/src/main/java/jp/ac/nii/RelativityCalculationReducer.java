@@ -21,21 +21,25 @@ public class RelativityCalculationReducer extends
 	@Override
 	public void reduce(Text keyIn, Iterable<Text> values, Context context)
 			throws IOException, InterruptedException {
+		// ヒント1: 正しく他のファイルが書けていれば、valuesの先頭は分母データで、2個目以降は分子データになる
+		// ヒント2: 正しく他のファイルが書けていれば、keyは「あんドーナツ#d」というように、末尾に#dが付いている
+		
+		String key = keyIn.toString();
+		String goodsName = key.substring(0, key.length() - 2)/* TODO: 商品Xの名前を設定 */;
 		Iterator<Text> iterator = values.iterator();
 
 		// 一番最初のvalueが分母になるようにソート済み（RelativityCalculationJob）
-		double denominator = Double.parseDouble(iterator.next().toString());
+		double denominator = Integer.parseInt(iterator.next().toString());
 
-		String keyStr = keyIn.toString();
 		while (iterator.hasNext()) {
-			String[] numeratorGoodsAndNum = iterator.next().toString()
-					.split(",");
-			double numerator = Double.parseDouble(numeratorGoodsAndNum[1]);
-			double relativity = numerator / denominator;
+			String[] nameAndNumerator = iterator.next().toString().split(",");
+			String pairGoodsName = nameAndNumerator[0] /* TODO: 関連度を計算する商品Yの名前を設定 */;
+			int numerator = Integer.parseInt(nameAndNumerator[1]);
+			double relativity = (double)numerator / denominator /* TODO: 関連度を計算 */;
 
-			if (relativity * 1000 > 25) {
-				String keyWithoutSharpD = keyStr.substring(0, keyStr.length() - 2);
-				valueOut.set(keyWithoutSharpD + "," + numeratorGoodsAndNum[0] + "," + relativity);
+			// 関連度が低すぎる（0.025以下）ペアは関連していないとみなしてフィルタリング
+			if (relativity > 0.025) {
+				valueOut.set(goodsName + "," + pairGoodsName + "," + relativity);
 				context.write(nullWritable, valueOut);
 			}
 		}

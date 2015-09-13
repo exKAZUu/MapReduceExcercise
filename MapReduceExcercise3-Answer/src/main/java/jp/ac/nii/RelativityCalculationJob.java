@@ -21,7 +21,7 @@ import org.apache.hadoop.mapreduce.lib.partition.HashPartitioner;
  * 関連度 = 商品Xと商品Yのペアの総数 / 商品Xを含むペアの総数
  * このクラスは完成しています。
  */
-public class RelativityCalculationJob extends Job {
+public class RelativityCalculationJob {
 
 	private static final Path denominationtFile = new Path(
 			FilePathConstants.FILE_BASE + "/"
@@ -32,31 +32,33 @@ public class RelativityCalculationJob extends Job {
 	private static final Path outputFile = new Path(FilePathConstants.FILE_BASE
 			+ "/" + FilePathConstants.RELATED_GOODS_FILE_NAME);
 
-	public RelativityCalculationJob() throws IOException {
-		this.setJobName("RelativityCalculationJob");
-		this.setJarByClass(RelativityCalculationJob.class);
+	public static Job create() throws IOException {
+		Job job = Job.getInstance();
+		job.setJobName("RelativityCalculationJob");
+		job.setJarByClass(RelativityCalculationJob.class);
 
-		this.setMapperClass(RelativityCaclulationMapper.class);
-		this.setReducerClass(RelativityCalculationReducer.class);
+		job.setMapperClass(RelativityCaclulationMapper.class);
+		job.setReducerClass(RelativityCalculationReducer.class);
 
-		this.setMapOutputKeyClass(Text.class);
-		this.setMapOutputValueClass(Text.class);
-		this.setOutputKeyClass(NullWritable.class);
+		job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputValueClass(Text.class);
+		job.setOutputKeyClass(NullWritable.class);
 
-		this.setInputFormatClass(TextInputFormat.class);
-		this.setOutputFormatClass(TextOutputFormat.class);
-		FileInputFormat.addInputPath(this, denominationtFile);
-		FileInputFormat.addInputPath(this, numerationFile);
-		FileOutputFormat.setOutputPath(this, outputFile);
+		job.setInputFormatClass(TextInputFormat.class);
+		job.setOutputFormatClass(TextOutputFormat.class);
+		FileInputFormat.addInputPath(job, denominationtFile);
+		FileInputFormat.addInputPath(job, numerationFile);
+		FileOutputFormat.setOutputPath(job, outputFile);
 
-		// キーの並び順をどうするか（ノードの割り当て前のキーのソート処理の制御）
-		this.setSortComparatorClass(RelativityCalculationSortComparator.class);
-		// どのノードでReduce処理を実行するか
-		this.setPartitionerClass(RelativityCalculationPartitioner.class);
-		// どのキーとどのキーを同一とみなすか（Reduceの処理単位の制御）
-		this.setGroupingComparatorClass(RelativityCalculationGroupComparator.class);
+		// キーの並び順をどうするか（Reduceタスクの割り当て前のキーのソート処理の制御）
+		job.setSortComparatorClass(RelativityCalculationSortComparator.class);
+		// どのReduceタスクでキー（と対応するバリュー）を処理するか（Reduceタスクの割り当て制御）
+		job.setPartitionerClass(RelativityCalculationPartitioner.class);
+		// どのキーとどのキーを同一とみなして、Reducerのバリューリストに集約するか（Reduceの処理単位の制御）
+		job.setGroupingComparatorClass(RelativityCalculationGroupComparator.class);
 
-		this.setNumReduceTasks(10);
+		job.setNumReduceTasks(10);
+		return job;
 	}
 
 	public static Text removeSharpD(Text key) {
@@ -67,6 +69,11 @@ public class RelativityCalculationJob extends Job {
 		return key;
 	}
 
+	/**
+	 * 以下のように分母データと分子データが入り乱れているので、例えば以下の
+	 * <あんドーナツ, ところてん,1200(注：分子データ)>, <あんドーナツ#d, 5400(注：分母データ)>, <あんドーナツ, 生シュークリーム,2000(注：分子データ)>
+	 * 「あんドーナツ」と「あんドーナツ#d」が同じキーと見なして、同じReduceタスクで処理されるようにハッシュ計算処理を制御する。
+	 */
 	private static class RelativityCalculationPartitioner extends
 			HashPartitioner<Text, Text> {
 
@@ -78,6 +85,11 @@ public class RelativityCalculationJob extends Job {
 		}
 	}
 
+	/**
+	 * 以下のように分母データと分子データが入り乱れているので、例えば以下の
+	 * <あんドーナツ, ところてん,1200(注：分子データ)>, <あんドーナツ#d, 5400(注：分母データ)>, <あんドーナツ, 生シュークリーム,2000(注：分子データ)>
+	 * 「あんドーナツ」と「あんドーナツ#d」を同じキーと見なして、バリューリストにまとめられるように比較処理を制御する。
+	 */
 	private static class RelativityCalculationGroupComparator extends
 			WritableComparator {
 
@@ -112,6 +124,12 @@ public class RelativityCalculationJob extends Job {
 		}
 	}
 
+	/**
+	 * 以下のように分母データと分子データが入り乱れているので、例えば以下の
+	 * <あんドーナツ, ところてん,1200(注：分子データ)>, <あんドーナツ#d, 5400(注：分母データ)>, <あんドーナツ, 生シュークリーム,2000(注：分子データ)>
+	 * キーに対するソート時の比較処理を制御することで、以下のように分母データが先頭に来るようにする。
+	 * <あんドーナツ#d, 5400(注：分母データ)>, <あんドーナツ, ところてん,1200(注：分子データ)>, <あんドーナツ, 生シュークリーム,2000(注：分子データ)>
+	 */
 	private static class RelativityCalculationSortComparator extends
 			WritableComparator {
 

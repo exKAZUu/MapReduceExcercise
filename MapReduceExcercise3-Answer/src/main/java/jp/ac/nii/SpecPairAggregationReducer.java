@@ -22,6 +22,8 @@ public class SpecPairAggregationReducer extends
 	@Override
 	public void reduce(Text keyIn, Iterable<IntWritable> values, Context context)
 			throws IOException, InterruptedException {
+		// TODO: 「商品X,商品Y」という商品ペアの出現頻度を計算するReducerを作ろう
+
 		int sum = 0;
 		Iterator<IntWritable> iterator = values.iterator();
 
@@ -32,7 +34,7 @@ public class SpecPairAggregationReducer extends
 
 		valueOut.set(keyIn.toString() + "," + sum);
 
-		// TODO 空のKeyと、 商品のペアとペアの出現回数がカンマ区切りで記録されたデータをValueとして出力するコードを記載してください
+		// TODO: キーはなしで、「商品X,商品Y,ペアの出現頻度」というバリューを出力しよう
 		context.write(nullWritable, valueOut);
 	}
 }

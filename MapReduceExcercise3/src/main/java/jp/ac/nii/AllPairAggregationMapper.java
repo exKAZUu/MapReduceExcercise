@@ -8,13 +8,13 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
 /**
- * 以下の式の分母（denominator）を計算するジョブのMapperです。
- *   関連度 = 商品Xと商品Yのペアの総数 / 商品Xを含むペアの総数
+ * 以下の式の分母（denominator）を計算するジョブのMapperです。 
+ * 関連度 = 商品Xと商品Yのペアの総数 / 商品Xを含むペアの総数
  */
 // TODO: 型パラメータを補完してください
-//　ヒント： FileInputFormat系(TextInputFormatなど)を使用する場合、入力のKeyはLongWritable、ValueはText型です
-public class AllPairAggregationMapper extends
-		Mapper<> {
+// ヒント：
+// FileInputFormat系(TextInputFormatなど)を使用する場合、入力のKeyはLongWritable、ValueはText型です
+public class AllPairAggregationMapper extends Mapper<> {
 
 	private static final IntWritable one = new IntWritable(1);
 
@@ -23,6 +23,9 @@ public class AllPairAggregationMapper extends
 	@Override
 	public void map(LongWritable keyIn, Text valuein, Context context)
 			throws IOException, InterruptedException {
+        // TODO: 同時に購入された商品ペアデータから、各商品の購入回数を計算するためのMapperを作ろう
+        // 入力はペアデータなので、1レコードから2種類の商品を1回ずつ購入したという情報が得られる
+      
 		// 商品名,商品名のペアを「,」を区切り文字として分割
 		String[] goodsPair = valuein.toString().split(",");
 

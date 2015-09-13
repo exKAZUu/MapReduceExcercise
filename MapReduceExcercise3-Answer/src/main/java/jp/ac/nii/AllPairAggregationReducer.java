@@ -24,6 +24,8 @@ public class AllPairAggregationReducer extends
 	@Override
 	public void reduce(Text keyIn, Iterable<IntWritable> values, Context context)
 			throws IOException, InterruptedException {
+		// TODO: ワードカウントと同じ要領でvaluesの合計を計算して、keyの商品の出現回数を計算しよう
+		
 		int sum = 0;
 		Iterator<IntWritable> iterator = values.iterator();
 

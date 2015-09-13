@@ -8,8 +8,8 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 
 /**
- * 以下の式の関連度を計算するジョブのMapperです。
- *   関連度 = 商品Xと商品Yのペアの総数 / 商品Xを含むペアの総数
+ * 以下の式の関連度を計算するジョブのMapperです。 
+ * 関連度 = 商品Xと商品Yのペアの総数 / 商品Xを含むペアの総数
  */
 public class RelativityCaclulationMapper extends
 		Mapper<LongWritable, Text, Text, Text> {
