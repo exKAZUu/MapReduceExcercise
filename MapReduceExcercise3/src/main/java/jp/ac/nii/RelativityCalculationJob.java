@@ -19,7 +19,6 @@ import org.apache.hadoop.mapreduce.lib.partition.HashPartitioner;
 /**
  * 以下の式の関連度を計算するジョブのJobです。 
  * 関連度 = 商品Xと商品Yのペアの総数 / 商品Xを含むペアの総数
- * このクラスは完成しています。
  */
 public class RelativityCalculationJob {
 
@@ -51,7 +50,7 @@ public class RelativityCalculationJob {
 		FileOutputFormat.setOutputPath(job, outputFile);
 
 		// TODO: このファイルに定義されている3種類のComparatorを下記に設定してください
-		
+
 		// キーの並び順をどうするか（Reduceタスクの割り当て前のキーのソート処理の制御）
 		job.setSortComparatorClass();
 		// どのReduceタスクでキー（と対応するバリュー）を処理するか（Reduceタスクの割り当て制御）
@@ -71,6 +70,11 @@ public class RelativityCalculationJob {
 		return key;
 	}
 
+	/**
+	 * 以下のように分母データと分子データが入り乱れているので、 例えば以下の
+	 * <あんドーナツ, ところてん,1200(注：分子データ)>, <あんドーナツ#d,　5400(注：分母データ)>, <あんドーナツ, 生シュークリーム,2000(注：分子データ)>
+	 * 「あんドーナツ」と「あんドーナツ#d」が同じキーと見なして、同じReduceタスクで処理されるようにハッシュ計算処理を制御する。
+	 */
 	private static class RelativityCalculationPartitioner extends
 			HashPartitioner<Text, Text> {
 
@@ -82,6 +86,11 @@ public class RelativityCalculationJob {
 		}
 	}
 
+	/**
+	 * 以下のように分母データと分子データが入り乱れているので、 例えば以下の
+	 * <あんドーナツ, ところてん,1200(注：分子データ)>, <あんドーナツ#d,　5400(注：分母データ)>, <あんドーナツ, 生シュークリーム,2000(注：分子データ)>
+	 * 「あんドーナツ」と「あんドーナツ#d」を同じキーと見なして、バリューリストにまとめられるように比較処理を制御する。
+	 */
 	private static class RelativityCalculationGroupComparator extends
 			WritableComparator {
 
@@ -116,6 +125,12 @@ public class RelativityCalculationJob {
 		}
 	}
 
+	/**
+	 * 以下のように分母データと分子データが入り乱れているので、 例えば以下の
+	 * <あんドーナツ, ところてん,1200(注：分子データ)>, <あんドーナツ#d,　5400(注：分母データ)>, <あんドーナツ, 生シュークリーム,2000(注：分子データ)>
+	 * キーに対するソート時の比較処理を制御することで、以下のように分母データが先頭に来るようにする。
+	 * <あんドーナツ#d,　5400(注：分母データ)>, <あんドーナツ, ところてん,1200(注：分子データ)>, <あんドーナツ,　生シュークリーム,2000(注：分子データ)>
+	 */
 	private static class RelativityCalculationSortComparator extends
 			WritableComparator {
 

@@ -13,8 +13,8 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 /**
- * 以下の式の分子（numerator）を計算するジョブのJobです。
- *   関連度 = 商品Xと商品Yのペアの総数 / 商品Xを含むペアの総数
+ * 以下の式の分子（numerator）を計算するジョブのJobです。 
+ * 関連度 = 商品Xと商品Yのペアの総数 / 商品Xを含むペアの総数
  */
 public class SpecPairAggregationJob {
 
@@ -29,15 +29,15 @@ public class SpecPairAggregationJob {
 		job.setJarByClass(SpecPairAggregationJob.class);
 
 		// TODO: MapperクラスとReducerクラスをセットするコードを記載してください
-		job.setMapperClass(SpecPairAggregationMapper.class);
-		job.setReducerClass(SpecPairAggregationReducer.class);
+		job.setMapperClass();
+		job.setReducerClass();
 
 		job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(IntWritable.class);
 
 		// TODO: 出力データのKeyとValueのクラスを設定するコードを記載してください
-		job.setOutputKeyClass(NullWritable.class);
-		job.setOutputValueClass(Text.class);
+		job.setOutputKeyClass();
+		job.setOutputValueClass();
 
 		job.setInputFormatClass(TextInputFormat.class);
 		job.setOutputFormatClass(TextOutputFormat.class);
@@ -45,7 +45,7 @@ public class SpecPairAggregationJob {
 		FileOutputFormat.setOutputPath(job, outputFile);
 
 		// TODO: Reduceタスクを10並列で実行するコードを記載してください
-		job.setNumReduceTasks(10);
+		job.setNumReduceTasks();
 		return job;
 	}
 }

@@ -12,8 +12,7 @@ import org.apache.hadoop.mapreduce.Reducer;
  * 以下の式の分子（numerator）を計算するジョブのReducerです。
  *  関連度 = 商品Xと商品Yのペアの総数 / 商品Xを含むペアの総数
  */
-public class SpecPairAggregationReducer extends
-		Reducer<> {
+public class SpecPairAggregationReducer extends Reducer<> {
 
 	private static final NullWritable nullWritable = NullWritable.get();
 
@@ -22,6 +21,8 @@ public class SpecPairAggregationReducer extends
 	@Override
 	public void reduce(Text keyIn, Iterable<IntWritable> values, Context context)
 			throws IOException, InterruptedException {
+	    // TODO: 「商品X,商品Y」という商品ペアの出現頻度を計算するReducerを作ろう
+
 		int sum = 0;
 		Iterator<IntWritable> iterator = values.iterator();
 

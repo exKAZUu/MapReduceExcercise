@@ -24,8 +24,8 @@ public class RelativityCalculationReducer extends
 		// ヒント1: 正しく他のファイルが書けていれば、valuesの先頭は分母データで、2個目以降は分子データになる
 		// ヒント2: 正しく他のファイルが書けていれば、keyは「あんドーナツ#d」というように、末尾に#dが付いている
 		
-		String goodsNameWithSharpD = keyIn.toString();
-		String goodsName = goodsNameWithSharpD.substring(0, goodsNameWithSharpD.length() - 2)/* TODO: 商品Xの名前を設定 */;
+		String key = keyIn.toString();
+		String goodsName = key.substring(0, key.length() - 2)/* TODO: 商品Xの名前を設定 */;
 		Iterator<Text> iterator = values.iterator();
 
 		// 一番最初のvalueが分母になるようにソート済み（RelativityCalculationJob）
@@ -34,7 +34,8 @@ public class RelativityCalculationReducer extends
 		while (iterator.hasNext()) {
 			String[] nameAndNumerator = iterator.next().toString().split(",");
 			String pairGoodsName = nameAndNumerator[0] /* TODO: 関連度を計算する商品Yの名前を設定 */;
-			double relativity = Integer.parseInt(nameAndNumerator[1]) / denominator /* TODO: 関連度を計算 */;
+			int numerator = Integer.parseInt(nameAndNumerator[1]);
+			double relativity = (double)numerator / denominator /* TODO: 関連度を計算 */;
 
 			// 関連度が低すぎる（0.025以下）ペアは関連していないとみなしてフィルタリング
 			if (relativity > 0.025) {

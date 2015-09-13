@@ -14,8 +14,7 @@ import org.apache.hadoop.mapreduce.Mapper;
  */
 // TODO: 型パラメータを補完してください
 // ヒント： Mapperの出力データのKeyとValueの型は、ReducerのKeyとValueの型と一致させる
-public class SpecPairAggregationMapper extends
-		Mapper<> {
+public class SpecPairAggregationMapper extends Mapper<> {
 
 	private static final IntWritable one = new IntWritable(1);
 
@@ -24,7 +23,8 @@ public class SpecPairAggregationMapper extends
 	@Override
 	public void map(LongWritable keyIn, Text valueIn, Context context)
 			throws IOException, InterruptedException {
-
+	    // TODO: 商品ペアの名前を昇順でソートした後、キーを「商品X,商品Y」という文字列、バリューを1にしてペアの頻度を計算するMapperを作ろう
+      
 		String[] goodsPair = valueIn.toString().split(",");
 
 		// TODO: 商品のペアを昇順にソートするコードを記載してください

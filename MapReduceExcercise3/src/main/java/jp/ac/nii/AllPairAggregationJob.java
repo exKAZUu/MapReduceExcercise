@@ -13,8 +13,8 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 /**
- * 以下の式の分母（denominator）を計算するジョブのJobです。
- *   関連度 = 商品Xと商品Yのペアの総数 / 商品Xを含むペアの総数
+ * 以下の式の分母（denominator）を計算するジョブのJobです。 
+ * 関連度 = 商品Xと商品Yのペアの総数 / 商品Xを含むペアの総数
  */
 public class AllPairAggregationJob {
 
