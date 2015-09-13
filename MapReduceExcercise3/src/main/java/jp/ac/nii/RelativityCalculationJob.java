@@ -21,7 +21,7 @@ import org.apache.hadoop.mapreduce.lib.partition.HashPartitioner;
  * 関連度 = 商品Xと商品Yのペアの総数 / 商品Xを含むペアの総数
  * このクラスは完成しています。
  */
-public class RelativityCalculationJob extends Job {
+public class RelativityCalculationJob {
 
 	private static final Path denominationtFile = new Path(
 			FilePathConstants.FILE_BASE + "/"
@@ -32,28 +32,35 @@ public class RelativityCalculationJob extends Job {
 	private static final Path outputFile = new Path(FilePathConstants.FILE_BASE
 			+ "/" + FilePathConstants.RELATED_GOODS_FILE_NAME);
 
-	public RelativityCalculationJob() throws IOException {
-		this.setJobName("RelativityCalculationJob");
-		this.setJarByClass(RelativityCalculationJob.class);
+	public static Job create() throws IOException {
+		Job job = Job.getInstance();
+		job.setJobName("RelativityCalculationJob");
+		job.setJarByClass(RelativityCalculationJob.class);
 
-		this.setMapperClass(RelativityCaclulationMapper.class);
-		this.setReducerClass(RelativityCalculationReducer.class);
+		job.setMapperClass(RelativityCaclulationMapper.class);
+		job.setReducerClass(RelativityCalculationReducer.class);
 
-		this.setMapOutputKeyClass(Text.class);
-		this.setMapOutputValueClass(Text.class);
-		this.setOutputKeyClass(NullWritable.class);
+		job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputValueClass(Text.class);
+		job.setOutputKeyClass(NullWritable.class);
 
-		this.setInputFormatClass(TextInputFormat.class);
-		this.setOutputFormatClass(TextOutputFormat.class);
-		FileInputFormat.addInputPath(this, denominationtFile);
-		FileInputFormat.addInputPath(this, numerationFile);
-		FileOutputFormat.setOutputPath(this, outputFile);
+		job.setInputFormatClass(TextInputFormat.class);
+		job.setOutputFormatClass(TextOutputFormat.class);
+		FileInputFormat.addInputPath(job, denominationtFile);
+		FileInputFormat.addInputPath(job, numerationFile);
+		FileOutputFormat.setOutputPath(job, outputFile);
 
-		this.setPartitionerClass(RelativityCalculationPartitioner.class);
-		this.setSortComparatorClass(RelativityCalculationSortComparator.class);
-		this.setGroupingComparatorClass(RelativityCalculationGroupComparator.class);
+		// TODO: このファイルに定義されている3種類のComparatorを下記に設定してください
+		
+		// キーの並び順をどうするか（Reduceタスクの割り当て前のキーのソート処理の制御）
+		job.setSortComparatorClass();
+		// どのReduceタスクでキー（と対応するバリュー）を処理するか（Reduceタスクの割り当て制御）
+		job.setPartitionerClass();
+		// どのキーとどのキーを同一とみなして、Reducerのバリューリストに集約するか（Reduceの処理単位の制御）
+		job.setGroupingComparatorClass();
 
-		this.setNumReduceTasks(10);
+		job.setNumReduceTasks(10);
+		return job;
 	}
 
 	public static Text removeSharpD(Text key) {

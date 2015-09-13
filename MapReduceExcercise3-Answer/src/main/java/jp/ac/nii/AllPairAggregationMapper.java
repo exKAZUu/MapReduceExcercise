@@ -23,6 +23,9 @@ public class AllPairAggregationMapper extends
 	@Override
 	public void map(LongWritable keyIn, Text valuein, Context context)
 			throws IOException, InterruptedException {
+		// TODO: 同時に購入された商品ペアデータから、各商品の購入回数を計算するためのMapperを作ろう
+		// 入力はペアデータなので、1レコードから2種類の商品を1回ずつ購入したという情報が得られる
+		
 		// 商品名,商品名のペアを「,」を区切り文字として分割
 		String[] goodsPair = valuein.toString().split(",");
 

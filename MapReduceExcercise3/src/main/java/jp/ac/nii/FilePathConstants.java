@@ -2,8 +2,8 @@ package jp.ac.nii;
 
 public class FilePathConstants {
 	// HDFS上の資材のパス
-	// TODO: Group番号とユーザ名を他と被らないように入力してください
-	public static final String FILE_BASE = /*"/groupX/USERX/ex3/input"*/;
+	// TODO: ユーザ名が他人と被らないように入力してください
+	public static final String FILE_BASE = /*"/USERX/ex3/input"*/;
 
 	// 各ファイルの名前
 	public static final String GOODS_PAIR_FILE_NAME = "goods_pair.csv";

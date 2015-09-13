@@ -16,34 +16,36 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
  * 以下の式の分子（numerator）を計算するジョブのJobです。
  *   関連度 = 商品Xと商品Yのペアの総数 / 商品Xを含むペアの総数
  */
-public class SpecPairAggregationJob extends Job {
+public class SpecPairAggregationJob {
 
 	private static final Path inputFile = new Path(FilePathConstants.FILE_BASE
 			+ "/" + FilePathConstants.GOODS_PAIR_FILE_NAME);
 	private static final Path outputFile = new Path(FilePathConstants.FILE_BASE
 			+ "/" + FilePathConstants.NUMERATOR_FILE_NAME);
 
-	public SpecPairAggregationJob() throws IOException {
-		this.setJobName("SpecPairAggregationJob");
-		this.setJarByClass(SpecPairAggregationJob.class);
+	public static Job create() throws IOException {
+		Job job = Job.getInstance();
+		job.setJobName("SpecPairAggregationJob");
+		job.setJarByClass(SpecPairAggregationJob.class);
 
 		// TODO: MapperクラスとReducerクラスをセットするコードを記載してください
-		this.setMapperClass();
-		this.setReducerClass();
+		job.setMapperClass(SpecPairAggregationMapper.class);
+		job.setReducerClass(SpecPairAggregationReducer.class);
 
-		this.setMapOutputKeyClass(Text.class);
-		this.setMapOutputValueClass(IntWritable.class);
+		job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputValueClass(IntWritable.class);
 
 		// TODO: 出力データのKeyとValueのクラスを設定するコードを記載してください
-		this.setOutputKeyClass();
-		this.setOutputValueClass();
+		job.setOutputKeyClass(NullWritable.class);
+		job.setOutputValueClass(Text.class);
 
-		this.setInputFormatClass(TextInputFormat.class);
-		this.setOutputFormatClass(TextOutputFormat.class);
-		FileInputFormat.addInputPath(this, inputFile);
-		FileOutputFormat.setOutputPath(this, outputFile);
+		job.setInputFormatClass(TextInputFormat.class);
+		job.setOutputFormatClass(TextOutputFormat.class);
+		FileInputFormat.addInputPath(job, inputFile);
+		FileOutputFormat.setOutputPath(job, outputFile);
 
 		// TODO: Reduceタスクを10並列で実行するコードを記載してください
-		TODO;
+		job.setNumReduceTasks(10);
+		return job;
 	}
 }
