@@ -25,12 +25,12 @@ public class WordCount {
 
 		public void map(LongWritable key, Text value, Context context)
 				throws IOException, InterruptedException {
-			// Stringに変換した上で、小文字にする
+			// Convert Text to String and make it lower case
 			String line = value.toString().toLowerCase();
 			String[] words = line.split(" ");
 			for (String word : words) {
 				if (isWord(word)) {
-					// String方の文字列をHadoopが扱う文字列型（Text）に変換する
+					// Convert String to Text for Hadoop
 					wordText.set(word);
 					context.write(wordText, one);
 				}
